@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const rateLimit = require("express-rate-limit");
 const bulkActions = require('./routes/bulkActions');
 const contacts = require('./routes/contacts');
 const dbConfig = require('./config/db');
@@ -16,8 +17,33 @@ mongoose.connect(dbConfig.url, { useNewUrlParser: true, useUnifiedTopology: true
     .then(() => console.log('MongoDB connected...'))
     .catch(err => console.log(err));
 
+
+const limitTime = 10 * 60 * 1000;
+// rate limiter
+const bulkActionLimiter = rateLimit({
+    windowMs: limitTime,
+    max: (req, res) => {
+        if (req?.user?.isAdmin) { // we can configure absed on privilage user
+            return 500;
+        }
+        return 150;
+    },
+    handler: function (req, res /*, next */) {
+        // we can implement more customized logic here like validation based user privilage, etc
+        // next() or send response as below
+        const timeRemaining = (limitTime - (Date.now() % limitTime)) / 1000;
+        res.status(this.statusCode).json({
+            message: `Too many requests from this IP, please try again after ${Math.ceil(timeRemaining / 60)} minutes.`
+        });
+    },
+    onLimitReached: function (req, res, options) {
+        console.warn(`Rate limit exceeded for ${req.ip}`);
+    }
+});
+
+
 // Routes
-app.use('/bulk-actions', bulkActions);
+app.use('/bulk-actions', bulkActionLimiter, bulkActions);
 app.use('/contacts', contacts);
 
 // Error handling middleware
