@@ -1,0 +1,265 @@
+{
+	"info": {
+		"_postman_id": "7aba295f-04bc-487e-a04a-3aabe2902dac",
+		"name": "bulk-action-platform",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "11869776"
+	},
+	"item": [
+		{
+			"name": "condition update bulk action",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"entityType\": \"Contact\",\r\n  \"updates\": [\r\n    {\r\n      \"type\": \"conditional-update\",\r\n      \"filters\": {\"lastContacted\": {\"$lt\": \"2024-01-01\"}},\r\n      \"updates\": {\"status\": \"inactive\", \"priority\": \"low\"}\r\n    },\r\n    {\r\n      \"type\": \"conditional-update\",\r\n      \"filters\": {\"lastContacted\": {\"$gte\": \"2024-01-01\"}},\r\n      \"updates\": {\"status\": \"active\", \"priority\": \"high\"}\r\n    }\r\n  ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base-url}}/bulk-actions/",
+					"host": [
+						"{{base-url}}"
+					],
+					"path": [
+						"bulk-actions",
+						""
+					]
+				},
+				"description": "Create bulk action to update multiple records with dynamic filter condition.  \n  \nType of bulk process action is \"conditional-update\"\n\n  \nThe payload contains the\n\n- entity type\n    \n- updates\n    \n    - bulk action type\n        \n    - filters // filter condition to update records in an entity\n        \n    - updates // specifies fields in an entity and the modified value\n        \n\n  \nThe example payload depicts to update user status and priority. The users who are lastContacted less than 6 months will be active and high priority and users who are lastContacted more than 6 six months status will be modified as inactive and thier priority will be low"
+			},
+			"response": []
+		},
+		{
+			"name": "update bulk action without condition",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"entityType\": \"Contact\",\r\n  \"updates\": [\r\n    {\r\n      \"type\": \"conditional-update\",\r\n      \"filters\": {},\r\n      \"updates\": {\"status\": \"active\", \"priority\": \"high\"}\r\n    }\r\n  ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base-url}}/bulk-actions/",
+					"host": [
+						"{{base-url}}"
+					],
+					"path": [
+						"bulk-actions",
+						""
+					]
+				},
+				"description": "Create bulk action to update multiple records without filter condition.\n\nType of bulk process action is \"conditional-update\"\n\nThe payload contains the\n\n- entity type\n    \n- updates\n    \n    - bulk action type\n        \n    - filters // filter condition by default empty\n        \n    - updates // specifies fields in an entity and the modified value\n        \n\nThe example payload depicts to update user status and priority without any condition. This is to show handling bulk update condition dynamically."
+			},
+			"response": []
+		},
+		{
+			"name": "insert bulk records",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"entityType\": \"Contact\",\r\n  \"updates\": [\r\n    {\r\n      \"type\": \"insert-bulk\",\r\n      \"records\": [\r\n          {\r\n    \"name\": \"Travis Gibson\",\r\n    \"email\": \"donna62@yahoo.com\",\r\n    \"age\": 70,\r\n    \"lastContacted\": \"2024-05-25\",\r\n    \"status\": \"active\",\r\n    \"priority\": \"low\"\r\n  },\r\n  {\r\n    \"name\": \"Mark Molina\",\r\n    \"email\": \"acarter@kerr.net\",\r\n    \"age\": 54,\r\n    \"lastContacted\": \"2024-06-08\",\r\n    \"status\": \"active\",\r\n    \"priority\": \"low\"\r\n  },\r\n  {\r\n    \"name\": \"Joel Rodriguez\",\r\n    \"email\": \"apriloliver@yahoo.com\",\r\n    \"age\": 59,\r\n    \"lastContacted\": \"2023-09-08\",\r\n    \"status\": \"active\",\r\n    \"priority\": \"low\"\r\n  }\r\n      ]\r\n    }\r\n  ]\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base-url}}/bulk-actions/",
+					"host": [
+						"{{base-url}}"
+					],
+					"path": [
+						"bulk-actions",
+						""
+					]
+				},
+				"description": "Create bulk action to insert bulk records.  \n  \nType of bulk process action is \"insert-bulk\"\n\n  \nThe payload contains the\n\n- entity type\n    \n- updates\n    \n    - bulk action type\n        \n    - array of records // SHould matches the entity type model"
+			},
+			"response": []
+		},
+		{
+			"name": "delete bulk action",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"entityType\": \"Contact\",\r\n  \"updates\": [\r\n    {\r\n      \"type\": \"delete-bulk\",\r\n      \"filters\": {\r\n        \"status\": \"active\"\r\n      }\r\n    }\r\n  ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base-url}}/bulk-actions/",
+					"host": [
+						"{{base-url}}"
+					],
+					"path": [
+						"bulk-actions",
+						""
+					]
+				},
+				"description": "Delete bulk action to update multiple records with dynamic filter condition.\n\nType of bulk process action is \"delete-bulk\"\n\nThe payload contains the\n\n- entity type\n    \n- updates\n    \n    - bulk action type\n        \n    - filters // filter condition to delete records in an entity\n        \n\nThe example payload depicts to delete users whose status is inactive"
+			},
+			"response": []
+		},
+		{
+			"name": "get bulk actions list",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base-url}}/bulk-actions/",
+					"host": [
+						"{{base-url}}"
+					],
+					"path": [
+						"bulk-actions",
+						""
+					]
+				},
+				"description": "To get list of all bulk actions created and saved in the database. History of all bulk actions"
+			},
+			"response": []
+		},
+		{
+			"name": "get bulk action detail",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base-url}}/bulk-actions/:actionId",
+					"host": [
+						"{{base-url}}"
+					],
+					"path": [
+						"bulk-actions",
+						":actionId"
+					],
+					"variable": [
+						{
+							"key": "actionId",
+							"value": "66abca47693c9ab1ece7b191"
+						}
+					]
+				},
+				"description": "To get details of a particular bulk action.\n\nprovide specific bulk actionId in the path variable to check the bulk action details"
+			},
+			"response": []
+		},
+		{
+			"name": "bulk action stats",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base-url}}/bulk-actions/:actionId/stats",
+					"host": [
+						"{{base-url}}"
+					],
+					"path": [
+						"bulk-actions",
+						":actionId",
+						"stats"
+					],
+					"variable": [
+						{
+							"key": "actionId",
+							"value": "66abca47693c9ab1ece7b191"
+						}
+					]
+				},
+				"description": "To get statistics for a specific bulk action\n\nprovide specific bulk actionId in the path variable to check the statistics"
+			},
+			"response": []
+		},
+		{
+			"name": "get action status",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base-url}}/bulk-actions/status",
+					"host": [
+						"{{base-url}}"
+					],
+					"path": [
+						"bulk-actions",
+						"status"
+					]
+				},
+				"description": "To display the status of ongoing, completed, and queued actions.  \n  \nWill provide the count of bulk actions with respect to these three actions"
+			},
+			"response": []
+		},
+		{
+			"name": "get actions progress",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base-url}}/bulk-actions/progress/66abca47693c9ab1ece7b191",
+					"host": [
+						"{{base-url}}"
+					],
+					"path": [
+						"bulk-actions",
+						"progress",
+						"66abca47693c9ab1ece7b191"
+					]
+				},
+				"description": "It shows the real-time progress of current bulk actions.\n\nProvide the specific bulk actionId in the params"
+			},
+			"response": []
+		},
+		{
+			"name": "get bulk-actions logs",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base-url}}/bulk-actions/logs?level=info&entityType=Contact",
+					"host": [
+						"{{base-url}}"
+					],
+					"path": [
+						"bulk-actions",
+						"logs"
+					],
+					"query": [
+						{
+							"key": "level",
+							"value": "info"
+						},
+						{
+							"key": "entityType",
+							"value": "Contact"
+						},
+						{
+							"key": "bulkActionId",
+							"value": "66abca47693c9ab1ece7b191",
+							"disabled": true
+						}
+					]
+				},
+				"description": "It provides the ability to fetch and filter logs.\n\nProvide customize filter based on your needs to check bulk actions logs"
+			},
+			"response": []
+		}
+	]
+}

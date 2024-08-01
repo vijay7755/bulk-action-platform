@@ -53,5 +53,8 @@ To start the application
    - by default application is configured to run on PORT 3000
    - You can access the application routes using a tool like Postman or via cURL: http://localhost:3000/bulk-actions
 
+## API collection documents
+   - You can find the Postman API  collection documents on ./APICollectionDoc dicrectory
+
 
    
