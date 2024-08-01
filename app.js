@@ -9,7 +9,7 @@ const dbConfig = require('./config/db');
 const app = express();
 
 // Middleware
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: '50mb' }));
 
 // Connect to MongoDB
 mongoose.connect(dbConfig.url, { useNewUrlParser: true, useUnifiedTopology: true })

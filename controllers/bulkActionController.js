@@ -22,19 +22,14 @@ exports.createBulkAction = async (req, res) => {
         }
 
         // Create a new bulk action
-        console.log("Creating bulk action with data:", { entityType, updates });
         const bulkAction = new BulkAction({ entityType, updates });
-        // console.log("BulkAction instance created:", bulkAction);
         await bulkAction.save();
-        // console.log("BulkAction saved successfully:", bulkAction);
 
         // Add the job to the queue
         queueManager.add({ bulkActionId: bulkAction._id });
 
-        console.log("BulkAction saved successfully and job initiated:", bulkAction);
-        res.status(201).json(bulkAction);
+        res.status(201).json({message: "BulkAction executed successfully", actionId:  bulkAction._id});
     } catch (err) {
-        console.log("err creating bulk action: ", err.message)
         res.status(500).json({ message: err.message });
     }
 };

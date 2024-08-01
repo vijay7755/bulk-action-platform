@@ -6,6 +6,8 @@ const logEntrySchema = new mongoose.Schema({
   message: { type: String, required: true },
   entityType: { type: String },
   bulkActionId: { type: mongoose.Schema.Types.ObjectId },
+  successCount: { type: Number },
+  faliureCount: { type: Number },
   timestamp: { type: Date, default: Date.now },
   metadata: { type: mongoose.Schema.Types.Mixed },
 });

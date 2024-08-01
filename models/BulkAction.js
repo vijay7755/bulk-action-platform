@@ -2,8 +2,9 @@ const mongoose = require('mongoose');
 
 const updateSchema = new mongoose.Schema({
     type: { type: String, required: true },
-    filters: { type: mongoose.Schema.Types.Mixed, required: true }, // Store filter conditions
-    updates: { type: mongoose.Schema.Types.Mixed, required: true }  // Store updates to apply
+    filters: { type: mongoose.Schema.Types.Mixed, default: {} }, // Store filter conditions
+    updates: { type: mongoose.Schema.Types.Mixed },  // Store updates to apply
+    records: [{ type: mongoose.Schema.Types.Mixed }]
 });
 
 const bulkActionSchema = new mongoose.Schema({

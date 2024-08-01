@@ -9,7 +9,7 @@ const bulkActionQueue = new Queue("bulk-action-queue", {
 // Process jobs in the queue
 bulkActionQueue.process(async (job, done) => {
   try {
-    console.log("bulkActionQueue job: ", job.id, job.data);
+    console.log("bulkActionQueue job: ", job.id);
     await bulkActionProcessor.processBulkAction(job.data.bulkActionId);
     done();
   } catch (err) {
@@ -20,7 +20,7 @@ bulkActionQueue.process(async (job, done) => {
 
 module.exports = {
   add: (data) => {
-    console.log("Adding bulk action to queue with data: ", data);
+    console.log("Adding bulk action to queue with data");
     bulkActionQueue.add(data)
       .then((job) => {
         console.log(`Added job ${job.id} to the queue`);
