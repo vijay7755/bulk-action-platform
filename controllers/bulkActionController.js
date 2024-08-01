@@ -75,3 +75,50 @@ exports.getBulkActionStats = async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 };
+
+
+// Get status of ongoing, completed, and queued actions
+exports.getActionStatus = async (req, res) => {
+    console.log("Accessing /status endpoint");
+    try {
+        const ongoingActions = await BulkAction.find({ status: 'ongoing' });
+        console.log("ongoingActions: ", ongoingActions)
+        const completedActions = await BulkAction.find({ status: 'completed' });
+        console.log("completedActions: ", completedActions)
+        const queuedActions = await BulkAction.find({ status: 'queued' });
+        console.log("queuedActions: ", queuedActions)
+
+        res.json({
+            ongoing: ongoingActions.length,
+            completed: completedActions.length,
+            queued: queuedActions.length
+        });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+
+// Get real-time progress of current bulk actions
+exports.getProgress = async (req, res) => {
+    try {
+        const actionId = req.params.actionId;
+        const bulkAction = await BulkAction.findById(actionId);
+
+        if (!bulkAction) {
+            return res.status(404).json({ message: 'Bulk action not found' });
+        }
+
+        const progress = {
+            actionId: bulkAction._id,
+            entityType: bulkAction.entityType,
+            createdAt: bulkAction.createdAt,
+            successCount: bulkAction.successCount,
+            failureCount: bulkAction.failureCount,
+            totalUpdates: bulkAction.updates.length
+        };
+
+        res.json(progress);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};

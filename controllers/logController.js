@@ -1,28 +1,19 @@
-const LogEntry = require('./../models/Log');
+const LogEntry = require('../models/Log');
 
-
-async function logAction(level, message, entityType = null, bulkActionId = null, metadata = {}, successCount, failureCount) {
+exports.getLogs = async (req, res) => {
   try {
-    const logEntry = new LogEntry({
-      level,
-      message,
-      entityType,
-      bulkActionId,
-      metadata,
-      successCount,
-      failureCount
-    });
+      const { level, entityType, bulkActionId, startDate, endDate } = req.query;
+      const filter = {};
 
-    await logEntry.save();
-    // console.log('Log entry saved:', message);
-  } catch (error) {
-    console.error('Error saving log entry:', error);
+      if (level) filter.level = level;
+      if (entityType) filter.entityType = entityType;
+      if (bulkActionId) filter.bulkActionId = bulkActionId;
+      if (startDate) filter.timestamp = { $gte: new Date(startDate) };
+      if (endDate) filter.timestamp = { ...filter.timestamp, $lte: new Date(endDate) };
+
+      const logs = await LogEntry.find(filter);
+      res.json(logs);
+  } catch (err) {
+      res.status(500).json({ message: err.message });
   }
-}
-
-module.exports = {
-    logAction
-}
-
-// Usage example
-// logAction('info', 'Processed bulk action', 'Contact', someContactId, { changes: { email: 'new@example.com' } });
+};

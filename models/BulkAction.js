@@ -13,6 +13,7 @@ const bulkActionSchema = new mongoose.Schema({
     createdAt: { type: Date, default: Date.now },
     successCount: { type: Number, default: 0 },
     failureCount: { type: Number, default: 0 },
+    status: {type: String, enum: ['queued', 'ongoing', 'completed'], default: "queued"},
 });
 
 const BulkAction = mongoose.model('BulkAction', bulkActionSchema);

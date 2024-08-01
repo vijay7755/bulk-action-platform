@@ -5,7 +5,7 @@ const models = {
   Company: require("../models/Company"),
 };
 const logger = require("../utils/logger");
-const { logAction } = require("../controllers/logController");
+const { logAction } = require("../utils/logAction");
 
 // Function to get the correct model based on entityType
 const getModel = (entityType) => {
@@ -25,6 +25,8 @@ exports.processBulkAction = async (bulkActionId) => {
     const bulkAction = await BulkAction.findById(bulkActionId);
     if (!bulkAction) throw new Error("Bulk action not found");
 
+    bulkAction.status = "ongoing";
+    await bulkAction.save();
     const model = getModel(bulkAction.entityType); // Get the model dynamically
     let totalSuccessCount = 0;
     let totalFailureCount = 0;
@@ -111,6 +113,7 @@ exports.processBulkAction = async (bulkActionId) => {
 
     bulkAction.successCount = totalSuccessCount;
     bulkAction.failureCount = totalFailureCount;
+    bulkAction.status = "completed";
 
     // Save the updated bulk action
     await bulkAction.save();
