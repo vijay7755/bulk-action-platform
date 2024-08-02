@@ -56,5 +56,12 @@ To start the application
 ## API collection documents
    - You can find the Postman API  collection documents on ./APICollectionDoc dicrectory
 
+## Seed Mock data
+   - Under the scripts you can execute the mock data generation and insertion scripts
+   - For now couple of thousands of mock contacts details is available in the resources directory which you can insert by executing seedContacts.js file
+   ```
+   node seedContacts.js
+   node seedCompaines.js
+   ```
 
    

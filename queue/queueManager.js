@@ -1,7 +1,7 @@
 const Queue = require("bull");
 const bulkActionProcessor = require("./bulkActionProcessor");
 
-// Create a new queue
+// It Creates a new queue
 const bulkActionQueue = new Queue("bulk-action-queue", {
   redis: { host: "127.0.0.1", port: 6379 },
 });

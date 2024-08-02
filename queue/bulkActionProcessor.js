@@ -42,13 +42,16 @@ exports.processBulkAction = async (bulkActionId) => {
         case "conditional-update":
           try {
             const totalDocuments = await model.countDocuments(update.filters);
+            console.log("total docs: ", totalDocuments)
             for (let i = 0; i < totalDocuments; i += BATCH_SIZE) {
+                console.log("******batch****: ", i)
               const result = await model.updateMany(
                 update.filters,
                 { $set: update.updates },
                 { skip: i, limit: BATCH_SIZE }
               );
               successCount += result.modifiedCount;
+              console.log("*****batch successcount*****: ", successCount)
               //   failureCount += (result.matchedCount || 0) - (result.modifiedCount || 0);
             }
           } catch (err) {
@@ -58,7 +61,6 @@ exports.processBulkAction = async (bulkActionId) => {
           break;
 
         case "insert-bulk":
-          // Assuming update.records is an array of documents to insert
           for (let i = 0; i < update.records.length; i += BATCH_SIZE) {
             const batch = update.records.slice(i, i + BATCH_SIZE);
             try {
@@ -66,14 +68,13 @@ exports.processBulkAction = async (bulkActionId) => {
               successCount += result.length;
             } catch (err) {
               console.error("Error inserting bulk records:", err);
-              failureCount += batch.length; // Assume all in batch failed on error
+              failureCount += batch.length;
             }
           }
           break;
 
         case "delete-bulk":
           try {
-            // This assumes that the deletion can be handled in a single operation or MongoDB handles it internally efficiently
             const result = await model.deleteMany(update.filters);
             successCount += result.deletedCount;
           } catch (err) {
